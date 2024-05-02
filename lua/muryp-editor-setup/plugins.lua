@@ -42,4 +42,5 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = todoComment,
   },
+  require 'muryp-editor-setup.formatter',
 }
