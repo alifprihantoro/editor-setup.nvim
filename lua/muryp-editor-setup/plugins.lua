@@ -1,4 +1,4 @@
-local todoComment = require "muryp-editor-setup.todoComment"
+local todoComment = require 'muryp-editor-setup.todoComment'
 
 -- Unless you are still migrating, remove the deprecated commands from v1.x
 vim.cmd [[ let g:neo_tree_remove_legacy_commands = 1 ]]
@@ -35,7 +35,7 @@ return {
   },
   {
     'muryp/muryp-git-setup.nvim',
-    import = 'muryp-git-setup/plugin'
+    import = 'muryp-git-setup/plugin',
   },
   {
     'folke/todo-comments.nvim',
