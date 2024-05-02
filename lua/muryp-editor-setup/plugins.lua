@@ -24,16 +24,6 @@ return {
     },
   },
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    Lazy = true,
-    cmd = 'Neotree',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
-    },
-  },
-  {
     'muryp/muryp-git-setup.nvim',
     import = 'muryp-git-setup/plugin',
   },
@@ -43,4 +33,5 @@ return {
     opts = todoComment,
   },
   require 'muryp-editor-setup.formatter',
+  require 'muryp-editor-setup.neotree',
 }
