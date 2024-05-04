@@ -5,25 +5,13 @@ local formatter_list = {
   astro = { 'astro' },
 }
 local ignore_filetypes = {}
-local function pushTable(arr1, arr2)
-  local result = {} -- Membuat tabel baru untuk hasil penggabungan
-  -- Menyalin elemen dari arr1 ke tabel hasil
-  for _, v in ipairs(arr1) do
-    table.insert(result, v)
-  end
-  -- Menyalin elemen dari arr2 ke tabel hasil
-  for _, v in ipairs(arr2) do
-    table.insert(result, v)
-  end
-  return result -- Mengembalikan tabel hasil yang berisi gabungan dari arr1 dan arr2
-end
 
 local addFormatter = function(listLang, formatter, isIgnore)
-  if isIgnore then
-    pushTable(listLang, ignore_filetypes)
-  end
   for _, val in pairs(listLang) do
     formatter_list[val] = formatter
+    if isIgnore then
+      table.insert(ignore_filetypes, val)
+    end
   end
 end
 
@@ -36,9 +24,11 @@ addFormatter({
 }, { 'prettierd', 'eslint_d' }, true)
 addFormatter({ 'html', 'css', 'scss', 'markdown' }, { 'prettierd' }, true)
 
+_G.HELR = ignore_filetypes
 return {
   'stevearc/conform.nvim',
   lazy = true,
+  event = 'InsertEnter',
   cmd = 'ConformInfo',
   keys = {
     {
@@ -83,19 +73,13 @@ return {
         if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
           return
         end
-        -- Disable with a global or buffer-local variable
-        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-          return
-        end
-        -- Disable autoformat for files in a certain path
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-        if bufname:match '/node_modules/' then
-          return
-        end
-        -- ...additional logic...
         return { timeout_ms = 500, lsp_fallback = true }
       end,
     }
     return opts
+  end,
+  init = function()
+    -- If you want the formatexpr, here is the place to set it
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   end,
 }
