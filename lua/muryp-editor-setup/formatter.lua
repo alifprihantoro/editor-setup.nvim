@@ -4,7 +4,24 @@ local formatter_list = {
   sh = { 'shfmt' },
   astro = { 'astro' },
 }
-local addFormatter = function(listLang, formatter)
+local ignore_filetypes = {}
+local function pushTable(arr1, arr2)
+  local result = {} -- Membuat tabel baru untuk hasil penggabungan
+  -- Menyalin elemen dari arr1 ke tabel hasil
+  for _, v in ipairs(arr1) do
+    table.insert(result, v)
+  end
+  -- Menyalin elemen dari arr2 ke tabel hasil
+  for _, v in ipairs(arr2) do
+    table.insert(result, v)
+  end
+  return result -- Mengembalikan tabel hasil yang berisi gabungan dari arr1 dan arr2
+end
+
+local addFormatter = function(listLang, formatter, isIgnore)
+  if isIgnore then
+    pushTable(listLang, ignore_filetypes)
+  end
   for _, val in pairs(listLang) do
     formatter_list[val] = formatter
   end
@@ -16,8 +33,8 @@ addFormatter({
   'typescript',
   'typescriptreact',
   'typescriptreact',
-}, { 'prettierd', 'eslint_d' })
-addFormatter({ 'html', 'css', 'scss', 'markdown' }, { 'prettierd' })
+}, { 'prettierd', 'eslint_d' }, true)
+addFormatter({ 'html', 'css', 'scss', 'markdown' }, { 'prettierd' }, true)
 
 return {
   'stevearc/conform.nvim',
@@ -63,7 +80,6 @@ return {
       },
       format_on_save = function(bufnr)
         -- Disable autoformat on certain filetypes
-        local ignore_filetypes = { 'sql', 'java' }
         if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
           return
         end
