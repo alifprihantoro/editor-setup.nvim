@@ -2,6 +2,7 @@ local formatter_list = {
   lua = { 'stylua' },
   fish = { 'fish_indent' },
   sh = { 'shfmt' },
+  astro = { 'astro' },
 }
 local addFormatter = function(listLang, formatter)
   for _, val in pairs(listLang) do
@@ -13,6 +14,7 @@ addFormatter({
   'javascript',
   'javascriptreact',
   'typescript',
+  'typescriptreact',
   'typescriptreact',
 }, { 'prettierd', 'eslint_d' })
 addFormatter({ 'html', 'css', 'scss', 'markdown' }, { 'prettierd' })
@@ -47,9 +49,16 @@ return {
       -- You can also define any custom formatters here.
       ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
       formatters = {
-        injected = { options = { ignore_errors = true } },
         shfmt = {
           prepend_args = { '-i', '2', '-ci' },
+        },
+
+        prettierd = {
+          cwd = nil,
+        },
+        astro = {
+          command = 'astrofm',
+          args = { '$FILENAME' },
         },
       },
       format_on_save = function(bufnr)
